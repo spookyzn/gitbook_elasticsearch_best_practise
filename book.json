@@ -1,14 +1,11 @@
 {
     "title": "ElasticSearch使用指引",
     "description": "ElasticSearch使用指引",
-    "keywords": "使用手册,markdown,gitbook,",
+    "keywords": "使用手册,markdown,gitbook",
     "introduction": {
         "path": "README.md",
         "title": "ElasticSearch使用指引"
     },
-     "plugins": [
-        // "-mathjax", "ga", "duoshuo"
-    ],
     "pluginsConfig": {
         "fontSettings": {
         "theme": "white",
@@ -21,8 +18,6 @@
         "about": false,
         "issues": false,
         "contribute": false,
-        "sidebar": { },
-        "tail": { },
         "gitbook": false,
         "sharing": {
             "google" : true,
