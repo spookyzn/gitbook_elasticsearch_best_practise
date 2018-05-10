@@ -6,10 +6,11 @@
         "path": "README.md",
         "title": "ElasticSearch使用指引"
     },
+    "plugins": ["-lunr", "-search", "search-plus"],
     "pluginsConfig": {
         "fontSettings": {
-        "theme": "white",
-        "family": "serif",
+        "theme": "night",
+        "family": "sans",
         "size": 2
         }
     },
