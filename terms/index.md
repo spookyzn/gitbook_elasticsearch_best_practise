@@ -1,4 +1,4 @@
-#术语列表
+# 术语列表
 
 ## Index （索引）
 ElasticSearch将数据存储在一个或多个index(索引)中。用SQL领域的术语来类比，索引就像数据库，可以向索引写入文档(document)或者从索引中读取文档，并通过在Elasticsearch内部使用Lucene将数据写入索引或从索引中检索数据。Elasticsearch中的索引是由一个或多个Lucene索引构成，具体细节由Elasticsearch的索引分片(shard), 复制(replica)机制及其配置决定。

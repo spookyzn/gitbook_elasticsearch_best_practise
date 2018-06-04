@@ -12,6 +12,7 @@
     * [禁用动态mapping](chapter2/guide2-1.md)
     * [字符型和数值型区分](chapter2/guide2-2.md)
 * [Elasticsearch查询指引](chapter3/index.md)
+    * [用PROFILE API 定位 ES 慢查询](chapter3/guide3-0.md)
     * [禁用前置通配符的wildcard查询](chapter3/guide3-1.md)
     * [尽量避免使用script](chapter3/guide3-2.md)
     * [禁止深度分页](chapter3/guide3-3.md)
