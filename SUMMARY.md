@@ -18,4 +18,9 @@
     * [禁止深度分页](chapter3/guide3-3.md)
     * [聚合层级不能太深](chapter3/guide3-4.md)
     * [禁止深度分页](chapter3/guide3-5.md)
+* [调优指引](chapter4/index.md)
+    * [索引速度调优](chapter4/guide4-0.md)
+    * [查询调优](chapter4/guide4-1.md)
+    * [磁盘空间调优](chapter4/guide4-2.md)
+    
 * [术语列表](terms/index.md)
