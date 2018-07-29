@@ -134,3 +134,6 @@ Shrink API 可以让你减少索引的shard数量。和之前提到的force merg
 ## 在文档中保证字段按同样存储
 
 由于多个文档被压缩成块，如果字段总是以相同的顺序出现，那么在这些_source文档中更可能找到更长的重复字符串。
+
+## 参考
+https://www.elastic.co/guide/en/elasticsearch/reference/master/tune-for-disk-usage.html

@@ -261,3 +261,6 @@ PUT index
 现在假设你有一个2分片索引和两个节点。在一种情况下，副本的数量为0，这意味着每个节点拥有一个`shard`。在第二种情况下，副本的数量为1，这意味着每个节点有两个`shard`。哪种设置在搜索性能上表现最好? 通常，每个节点的`shard`总数较少的设置会执行得更好。原因在于，它为每个`shard`提供了更大的可用文件系统缓存份额，而文件系统缓存可能是Elasticsearch的头号性能因素。与此同时，要注意，没有副本的设置在出现单个节点故障时可能会出现故障，因此在吞吐量和可用性之间需要进行权衡。
 
 那么正确的副本数量是多少? 如果您有一个`num_nodes`节点的集群，总数为`num_primary` primary shards，如果您希望能够同时处理`max_failure` 节点失败，那么您需要的正确副本数量是 `max(max_failure, ceil(num_nodes / num_primar_node) - 1)`。
+
+## 参考
+https://www.elastic.co/guide/en/elasticsearch/reference/master/tune-for-search-speed.html

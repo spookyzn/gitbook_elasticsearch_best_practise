@@ -49,5 +49,8 @@
 [_field_names](https://www.elastic.co/guide/en/elasticsearch/reference/master/mapping-field-names-field.html) 字段引入了一些索引时开销，因此如果你不使用`exists`查询，禁用它。
 
 ## 其他
-
+
 参考本章中的存储使用调优，也对加速索引速度有用处。
+
+## 参考
+https://www.elastic.co/guide/en/elasticsearch/reference/master/tune-for-indexing-speed.html
