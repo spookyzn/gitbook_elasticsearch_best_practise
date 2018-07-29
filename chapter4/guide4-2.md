@@ -125,4 +125,12 @@ Shrink API 可以让你减少索引的shard数量。和之前提到的force merg
 
 针对数值型数据来选择的字段类型对于磁盘空间有很大的影响。尤为重要，数值型需要使用其对应的类型（integer, byte, short, long)。一个float类型的值也可以使用`scaled_float`类型，如果针对实际使用案例是合适的，比如使用float来替换double，或者half_float替换float都可以省下磁盘空间。
 
+## 使用索引排序来排列相似的文档
 
+当Elasticsearch存储_source时，它同时压缩多个文档，以提高整体压缩比。例如，文档共享相同的字段名是很常见的，它们共享一些字段值也很常见，特别是在具有低基数或zipfian分布的字段上。
+
+默认情况下，按将文档添加到索引中的顺序压缩在一起。如果启用了[索引排序](https://www.elastic.co/guide/en/elasticsearch/reference/master/index-modules-index-sorting.html)，那么它们将按排序顺序压缩。对具有相似结构、字段和值的文档进行排序，可以提高压缩比。
+
+## 在文档中保证字段按同样存储
+
+由于多个文档被压缩成块，如果字段总是以相同的顺序出现，那么在这些_source文档中更可能找到更长的重复字符串。
