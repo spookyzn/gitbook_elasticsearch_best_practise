@@ -21,6 +21,8 @@
 * [调优指引](chapter4/index.md)
     * [索引速度调优](chapter4/guide4-0.md)
     * [查询调优](chapter4/guide4-1.md)
-    * [磁盘空间调优](chapter4/guide4-2.md)
+    * [存储使用调优](chapter4/guide4-2.md)
+* [插件开发](chapter5/index.md)    
+    * [使用maven搭建es5.0插件项目](chapter5/guide5-0.md)
     
 * [术语列表](terms/index.md)
