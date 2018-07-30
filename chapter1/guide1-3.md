@@ -1,13 +1,32 @@
-# 写入大量数据时设置合理的bulk size
+# 最大化elasticsearch索引性能
 
-## 使用bulk请求
+## Flushing of Tansaction log
 
-批量请求将产生比单文档索引请求更好的性能。为了知道批量请求的最佳大小，您应该在一个节点上运行一个带有单个`shard`的基准。首先尝试一次索引100个文档，然后是200，然后是400，等等，在每次基准测试运行中，将批量请求中的文档数量增加一倍。当索引速度开始趋于平稳时，您就知道您达到了对数据的批量请求的最佳大小。要注意的是，当许多请求并发地发送时，过大的批量请求可能会使集群处于内存压力之下，因此最好避免在每次请求时超过几十兆字节，即使较大的请求看起来性能更好。
+translog帮助防止节点失败时的数据丢失。它的设计目的是帮助`shard`恢复操作，否者数据可能会从内存flush到磁盘时发生意外而丢失。日志每5秒被提交到磁盘上，或者在每个成功的索引、删除、更新或批量请求时提交。
 
-## 使用多个线程发送数据至Elasticsearch
+为了防止数据丢失，每个`shard`都有一个事务日志或与之关联的写入日志。任何索引或删除操作在内部Lucene索引处理后被写入到translog中。在崩溃的情况下，当`shard`恢复时，可以从事务日志中重新重放最近的事务。
 
-发送大量请求的单个线程不太可能最大限度地完全使用ES的索引容量。为了使用集群的所有资源，您应该从多个线程或进程发送数据。除了更好地利用集群的资源之外，这应该有助于降低每个fsync的成本。
+ES的flush是执行Lucene提交并产生新的translog的过程。它是在后台自动完成的，以确保事务日志不会太大，这将使在恢复期间重放其操作花费大量时间。它也通过API来操作。
 
-请务必注意`TOO_MANY_REQUESTS(429)响应码`(Java的EsRejectedExecutionException)，这是Elasticsearch告诉您它无法跟上当前索引率的方式。当这种情况发生时，您应该在再次尝试之前暂停索引，最好是使用随机指数备份。
+与刷新索引`shard`相比，真正昂贵的操作是刷新其事务日志(涉及Lucene提交)。通过延迟刷新或完全禁用它们，可以提高索引吞吐量。但是这种做法有利有弊，延迟的flush当然会花费更长的时间。
 
-与批量请求相似，只有测试才能确定最佳线程数量。这可以通过逐步增加线程数量来测试，直到集群上的I/O或CPU饱和为止。
+以下参数是用于控制flush的频率
+- `index.translog.flush_threshold_size` - translog按size大小flush，默认为521M
+- `index.translog.flush_threshold_ops` - 多少任务来执行操作，默认为`ulimited`
+- `index.translog.flush_threshold_period` - 在触发刷新之前，不管事务日志大小，需要等待多长时间。默认为30m
+- `index.translog.sync_interval` - 多久检测是否需要flush。默认为5s
+- `index.translog.durability` - sync方式。默认为fsync，可选为async。2者区别，fsync每次操作都会commit到translog。async按设置的sync_interval时间定期commit到translog。 fsync更耗费资源，但可靠性好，async模式下，如果sync_interval间隔时间内发生问题，中间没有commit的操作会全部丢失
+
+### 建议
+
+我们可以增加index.translog.flush_threshold_size从默认的512M到更大的值，比如1gb。这允许在发生刷新之前在translog中积累更大的`segment`。通过让更大的`segment`构建，可以减少刷新的频率，而更大的`segement`合并的频率也更低。所有这些都减少了磁盘I/O开销，提高了索引吞吐量。当然，将需要相应的heap空闲内存来提供额外缓冲空间，调整时此设置时请记住这一点。
+
+### 最佳实践
+
+如没有其他特殊需求。可以使用一下参数来配置
+
+```
+index.translog.flush_threshold_size: "1gb"
+index.translog.sync_interval: "60s"
+index.translog.durability: "async"
+```

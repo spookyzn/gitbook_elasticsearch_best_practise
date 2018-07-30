@@ -1,11 +1,63 @@
-# 索引更新及索引提交 
+# 最大化elasticsearch索引性能
 
-## 增加refresh interval的值
+## 关于参数refrsh interval 
 
-默认的索引。refresh_interval值为1，这使搜索每秒钟创建一个新的`segment`。增加这个值(比如30s)将允许更大的`segment`刷新并减少未来的合并压力。
+### 关闭refreshd interval  
+refresh interval 可以通过参数`index.refresh_interval`来设置，该参数在集群配置中使用，也可以在每个`index`的设置中使用。如果两者都使用，则`index`上的配置会覆盖集群设置。默认值是1，所以新索引的文档最多在1秒后可以被搜索到。
 
-## 导入大量数据时，关闭refresh interval & 复制片
+因为`refresh`很昂贵，提高索引吞吐量的一种方法是增加`refresh_interval`。较少的`refresh`意味着较少的负载，更多的资源可以用于`indexing`线程。因此，根据搜索需求，可以考虑将刷新间隔设置为高于1秒的值。甚至可以暂时完全关闭索引刷新(通过将间隔设置为-1)，例如，在批量导入数据时，可以考虑把`refresh`关闭
 
-如果需要一次加载大量数据，应该通过设置索引来禁用refresh。refresh_interval设置为-1，并设置索引的number_of_replicas为0。这将暂时使您的索引处于危险之中，因为任何`shard`丢失都将导致数据丢失，但是与此同时索引速度将更快，因为文档将只被索引一次。一旦初始加载完成，就可以设置索引的refresh_interval，number_of_replicas回到原始值。
+关闭refresh，设置`refresh-intreval`为-1
+```
+curl -XPUT 'localhost:9200/test/_settings' -d '{
+    "index" : {
+        "refresh_interval" : "-1"
+    }
+}'
+```
 
-## translog 设置
+### 关闭复制片
+
+如果正在进行大量导入，可以禁用副本。当文档被复制时，整个文档被发送到副本节点，索引过程被重复。这意味着每个副本将执行分析、索引和潜在的合并过程。相反，如果您索引的副本为0，然后在导入数据完成时启用副本，则恢复过程实质上是字节对字节的网络传输。这比复制索引过程要有效得多。
+
+```
+curl -XPUT 'localhost:9200/my_index/_settings' -d ' {
+    "index" : {
+        "number_of_replicas" : 0
+    }
+}'
+```
+
+### 恢复索引参数
+
+打开复制片
+
+```
+curl -XPUT 'localhost:9200/my_index/_settings' -d ' {
+    "index" : {
+        "number_of_replicas" : 0
+    }
+}'
+```
+
+打开refresh interval
+
+```
+curl -XPUT 'localhost:9200/my_index/_settings' -d '{
+    "index" : {
+        "refresh_interval" : "1s"
+    } 
+}'
+```
+
+如果该索引导入数据后不再写入新数据，可以对该只读索引执行`force merge`，这样可以提高查询速度。
+
+```
+curl -XPOST 'localhost:9200/my_index/_forcemerge?max_num_segments=5'
+```
+
+
+导入完成后，可以手动refresh
+```
+curl -XPOST 'localhost:9200/my_index/_refresh'
+```
