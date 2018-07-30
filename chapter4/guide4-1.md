@@ -219,10 +219,10 @@ GET index/_search
 
 ## 预热global ordinals
 
-`global ordinals` 是一个数据结构，用于在`keyword`字段上运行`terms`聚合。它们被延迟地加载到内存中，因为ES不知道哪些字段将用于`terms`聚合，哪些字段不会。您可以通过配置映射(如下所述)在刷新时告诉Elasticsearch急切地加载`global ordinals`:
+`global ordinals` 是一个数据结构，用于在`keyword`字段上运行`terms`聚合。它们被延迟地加载到内存中，因为ES不知道哪些字段将用于`terms`聚合，哪些字段不会。你可以通过配置映射(如下所述)在刷新时告诉Elasticsearch直加载`global ordinals`:
 ```
 PUT index
-{
+
   "mappings": {
     "_doc": {
       "properties": {
