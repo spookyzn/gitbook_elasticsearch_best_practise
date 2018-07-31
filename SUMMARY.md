@@ -16,6 +16,7 @@
     * [禁用动态mapping，自定义mapping](chapter1/guide1-5.md)
     * [写入大量数据时设置合理的bulk size](chapter1/guide1-9.md)
 * [Elasticsearch查询指引](chapter3/index.md)
+    * [如何设置慢查询日志](chapter3/guide3-5.md)
     * [用PROFILE API 定位 ES 慢查询](chapter3/guide3-0.md)
     * [禁用前置通配符的wildcard查询](chapter3/guide3-1.md)
     * [尽量避免使用script](chapter3/guide3-2.md)
