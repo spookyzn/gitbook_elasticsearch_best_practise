@@ -24,10 +24,16 @@
 - 其他问题请查看简明教程
 
 ## 发布
-编辑完成直接提交到git，后续有程序定期更新。
-> 发布地址: http://10.2.53.38/gitbook/
+
+- 编辑完成直接提交到git。
+
+- 如需要发布请运行
+http://10.2.53.38:8080/view/es-paas/job/gitbook-elasticsearch-best-practise/
+
+- 发布地址: http://10.2.53.38/gitbook/
 
 ## 相关参考
 [gitbook 简明教程](http://www.chengweiyang.cn/gitbook/index.html)
+
 [gitbook doc](https://toolchain.gitbook.com/syntax/markdown.html#headings)
 
