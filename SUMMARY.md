@@ -14,6 +14,7 @@
     * [Flushing of Tansaction log](chapter1/guide1-3.md)
     * [存储硬件因素](chapter1/guide1-4.md)
     * [禁用动态mapping，自定义mapping](chapter1/guide1-5.md)
+    * [使用自动生成的标识id](chapter1/guide1-6.md)
     * [写入大量数据时设置合理的bulk size](chapter1/guide1-9.md)
 * [Elasticsearch查询指引](chapter3/index.md)
     * [如何设置慢查询日志](chapter3/guide3-5.md)
