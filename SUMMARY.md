@@ -1,13 +1,6 @@
 # Summary
 
 * [简介](README.md)
-* [客户端使用指引](chapter0/index.md)
-    * [客户端使用最佳实践](chapter0/guide0-1.md)
-    * [调用elasticsearch restful 接口出现401错误](chapter0/guide0-2.md)
-    * [.NET 客户端偶尔出现“The underlying connection was closed: A connection that was expected to be kept alive was closed by the server.”错误](chapter0/guide0-3.md)
-    * [使用restful http协议访问的客户端出现connection closed 问题](chapter0/guide0-4.md)
-    * [通过http restful接口访问出现http error code 502](chapter0/guide0-5.md)
-    * [SLB reload 导致connection reset](chapter0/guide0-6.md)
 * [Elasticsearch索引指引](chapter1/index.md)
     * [选择合适的主片和复制片](chapter1/guide1-1.md)
     * [关于参数refrsh interval](chapter1/guide1-2.md)
